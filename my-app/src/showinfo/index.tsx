@@ -1,7 +1,11 @@
 import React from "react";
+import type { Product } from "../types/product";
 
-const ShowInfo = () => {
-  return <div>Ahihi</div>;
+type ShowInfoProps = {
+  info: Product;
+};
+const ShowInfo = (props: ShowInfoProps) => {
+  return <div>{props.info.name}</div>;
 };
 
 export default ShowInfo;

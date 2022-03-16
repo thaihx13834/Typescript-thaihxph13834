@@ -24,9 +24,15 @@ function App() {
     }
   };
 
+  const [info, setInfo] = useState<Product>({
+    id: 1,
+    name: "Thai",
+    age: 12,
+  });
+
   return (
     <div className="App">
-      <ShowInfo />
+      <ShowInfo info={info} />
       {products.map((item) => (
         <div>
           {item.name}
