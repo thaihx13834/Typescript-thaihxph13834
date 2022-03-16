@@ -3,6 +3,7 @@ import logo from "./logo.svg";
 import "./App.css";
 import type { Product } from "./types/product";
 import axios from "axios";
+import ShowInfo from "./showinfo";
 
 function App() {
   const [products, setProducts] = useState<Product[]>([]);
@@ -25,6 +26,7 @@ function App() {
 
   return (
     <div className="App">
+      <ShowInfo />
       {products.map((item) => (
         <div>
           {item.name}
