@@ -1,12 +1,3 @@
 {
-  "products": [
-    {
-      "id": 1,
-      "name": "Thai"
-    },
-    {
-      "id": 2,
-      "name": "Thai 1"
-    }
-  ]
+  "products": []
 }

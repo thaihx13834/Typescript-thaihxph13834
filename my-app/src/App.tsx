@@ -9,17 +9,29 @@ function App() {
 
   useEffect(() => {
     const getProducts = async () => {
-      const { data } = await axios.get(" http://localhost:3001/products");
+      const { data } = await axios.get(" http://localhost:3000/products");
       setProducts(data);
     };
     getProducts();
   }, []);
 
+  const removeProduct = async (id: number) => {
+    console.log(id);
+    const { data } = await axios.delete("http://localhost:3000/products/" + id);
+    if (data) {
+      const newProducts = products.filter((item) => item.id !== id);
+      setProducts(newProducts);
+    }
+  };
+
   return (
     <div className="App">
       <hr />
       {products.map((item) => (
-        <div>{item.name}</div>
+        <div>
+          {item.name}
+          <button onClick={() => removeProduct(item.id)}>Remove</button>
+        </div>
       ))}
     </div>
   );
