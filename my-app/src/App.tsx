@@ -1,51 +1,73 @@
 import { useState, useEffect } from "react";
 import logo from "./logo.svg";
 import "./App.css";
-import axios from "axios";
-import ShowInfo from "./showinfo";
-import { Navigate, NavLink, Route, Routes } from "react-router-dom";
-import WebLayout from "./Layouts/WebLayout";
-import Home from "./Pages/Home";
-import Product from "./Pages/Product";
-import AdminLayout from "./Layouts/AdminLayout";
-import Dashboard from "./Pages/Dashboard";
-import ManagerProducts from "./Pages/ManagerProducts";
 
+import { NavLink, Routes, Route, Navigate } from "react-router-dom";
+import WebsiteLayout from "./pages/layouts/WebsiteLayout";
+import Home from "./pages/Home";
+import Products from "./pages/Products";
+import AdminLayout from "./pages/layouts/AdminLayout";
+import Dashboard from "./pages/Dashboard";
+import ManagerProducts from "./pages/ManagerProducts";
+import type { Product } from "./types/product";
+import axios from "axios";
+import "bootstrap/dist/css/bootstrap.min.css";
+import ProductsAdd from "./pages/ProductsAdd";
 function App() {
+  const [products, setProducts] = useState<Product[]>([]);
+
+  useEffect(() => {
+    const getProducts = async () => {
+      const { data } = await axios.get(" http://localhost:8000/products");
+      setProducts(data);
+      console.log(products);
+    };
+    getProducts();
+  }, []);
+
+  const onHandleAdd = async (product: Product) => {
+    const { data } = await axios.post(
+      "http://localhost:8000/products",
+      product
+    );
+    console.log(data);
+
+    data && setProducts([...products, data]);
+  };
+
   return (
     <div className="App">
-      <header>
-        <ul>
-          <li>
-            <NavLink to="/">Home page</NavLink>
-          </li>
-          <li>
-            <NavLink to="/products">Products page</NavLink>
-          </li>
-          <li>
-            <NavLink to="/admin/dashboard">Admin</NavLink>
-          </li>
-        </ul>
-      </header>
+      <ul>
+        <li>
+          <NavLink to="/">Home</NavLink>
+        </li>
+        <li>
+          <NavLink to="products">Product</NavLink>
+        </li>
+        <li>
+          <NavLink to="admin">Admin</NavLink>
+        </li>
+        <li>
+          <NavLink to="admin/products">Manager Product</NavLink>
+        </li>
+      </ul>
 
-      <main>
-        <Routes>
-          {/* <Route path="/" element={<h1>Home page</h1>} />
-          <Route path="products" element={<h1>Products page</h1>} />
-          <Route path="about" element={<h1>ABout page</h1>} /> */}
+      <Routes>
+        <Route path="/" element={<WebsiteLayout />}>
+          <Route index element={<Home />} />
+          <Route path="products" element={<Products data={products} />} />
+          <Route
+            path="products/add"
+            element={<ProductsAdd onAdd={onHandleAdd} />}
+          />
+        </Route>
 
-          <Route path="/" element={<WebLayout />}>
-            <Route index element={<Home />} />
-            <Route path="products" element={<Product />} />
-          </Route>
-
-          <Route path="admin" element={<AdminLayout />}>
-            <Route index element={<Navigate to="dashboard" />} />
-            <Route path="dashboard" element={<Dashboard />} />
-            <Route path="product" element={<ManagerProducts />} />
-          </Route>
-        </Routes>
-      </main>
+        <Route path="admin" element={<AdminLayout />}>
+          <Route index element={<Navigate to="dashboard" />} />
+          <Route path="dashboard" element={<Dashboard />} />
+          <Route path="products" element={<ManagerProducts />} />
+        </Route>
+      </Routes>
     </div>
   );
 }

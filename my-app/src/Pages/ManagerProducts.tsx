@@ -3,7 +3,7 @@ import React from "react";
 type Props = {};
 
 const ManagerProducts = (props: Props) => {
-  return <div>ManagerProducts</div>;
+  return <div>Day la trang ManagerProducts</div>;
 };
 
 export default ManagerProducts;
